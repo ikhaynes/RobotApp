@@ -18,23 +18,23 @@ class MainActivity : AppCompatActivity() {
 
     private var turnCount = 0
 
-//    private val robots = listOf(
-//    Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
-//    Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
-//    Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
-//    )
+    private val robots = listOf(
+    Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
+    Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
+    Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "OnCreate(savedInstanceState)")
-//        val robots = listOf(
-//            Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
-//            Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
-//            Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
-//
-//        )
+        val robots = listOf(
+            Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
+            Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
+            Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
+
+        )
 
         yellowRobot = findViewById(R.id.yellow_robot_large)
         redRobot = findViewById(R.id.red_robot_large)
@@ -102,12 +102,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-//    private fun setRobotTurn(){
-//        for(robot in robots){
-//            robot.myTurn = false
-//        }
-//        robots[turnCount - 1].myTurn = true
-//    }
+    private fun setRobotTurn(){
+        for(robot in robots){
+            robot.myTurn = false
+        }
+        robots[turnCount - 1].myTurn = true
+    }
 
     override fun onStart() {
         super.onStart()
