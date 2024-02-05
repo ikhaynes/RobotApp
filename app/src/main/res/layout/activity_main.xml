@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/yellow_robot_large"
+        android:contentDescription="@string/yellow_content_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/robot_yellow_large" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <ImageView
+            android:id="@+id/red_robot_large"
+            android:contentDescription="@string/red_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/robot_red_large" />
+
+
+
+        <ImageView
+            android:id="@+id/white_robot_large"
+            android:contentDescription="@string/white_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/robot_white_large" />
+    </LinearLayout>
+
+<!--    empty linear layout to add a space for buttons-->
+    <LinearLayout
+        android:id="@+id/empty_layout_1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/rot_cw"
+            android:contentDescription="@string/CW_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rot_cw_background"
+            app:srcCompat="@drawable/rot_clockwise" />
+
+<!--        empty layout for space   -->
+        <LinearLayout
+            android:id="@+id/empty_layout_2"
+            android:orientation="horizontal"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <ImageButton
+            android:id="@+id/rot_ccw"
+            android:contentDescription="@string/CCW_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rot_ccw_background"
+            app:srcCompat="@drawable/rot_counter" />
+
+    </LinearLayout>
+
+</LinearLayout>

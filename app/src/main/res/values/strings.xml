@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RobotApp2.0</string>
+    <string name="yellow_msg">Yellow Clicked</string>
+    <string name="CCW_content_description">rotate robots counter-clockwise</string>
+    <string name="CW_content_description">rotate robots clockwise</string>
+    <string name="yellow_content_description">Yellow robot</string>
+    <string name="red_content_description">Red robot</string>
+    <string name="white_content_description">White robot</string>
+</resources>
