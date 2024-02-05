@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Toast
+//import android.widget.Toast
+import androidx.activity.viewModels
+
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
     )
 
+    private val robotViewModel : RobotViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
