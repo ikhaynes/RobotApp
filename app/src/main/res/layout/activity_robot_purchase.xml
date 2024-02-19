@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <!--    horizontal layout for robot and energy-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/white_large_robot"
+            android:contentDescription="@string/white_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/robot_white_large" />
+
+        <TextView
+            android:id="@+id/robot_purchase_power"
+            android:contentDescription="@string/energy_number_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/robot_purchase_power_val"
+            android:textSize="20sp"
+            app:drawableRightCompat="@drawable/energy_counter"/>
+
+    </LinearLayout>
+
+    <!--    LinearLayout for buttons-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!--        Linear layout for 1st button-->
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/reward_a"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ra_button_text"/>
+
+            <TextView
+                android:id="@+id/cost_reward_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/energy_number_content"
+                android:text="@string/ra_cost"
+                android:textSize="20sp"
+                app:drawableRightCompat="@drawable/energy_counter"/>
+
+        </LinearLayout>
+
+        <!--        Linear layout for 2nd button-->
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/reward_b"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/rb_button_text"/>
+
+            <TextView
+                android:id="@+id/cost_reward_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/energy_number_content"
+                android:text="@string/rb_cost"
+                android:textSize="20sp"
+                app:drawableRightCompat="@drawable/energy_counter"/>
+
+        </LinearLayout>
+
+        <!--        Linear layout for 3rd button-->
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/reward_c"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/rc_button_text"/>
+
+            <TextView
+                android:id="@+id/cost_reward_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/energy_number_content"
+                android:text="@string/rc_cost"
+                android:textSize="20sp"
+                app:drawableRightCompat="@drawable/energy_counter"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
