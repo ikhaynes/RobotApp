@@ -1,4 +1,5 @@
 <resources>
+<!--    values for activity_main.xml-->
     <string name="app_name">RobotApp2.0</string>
     <string name="yellow_msg">Yellow Clicked</string>
     <string name="CCW_content_description">rotate robots counter-clockwise</string>
@@ -6,6 +7,9 @@
     <string name="yellow_content_description">Yellow robot</string>
     <string name="red_content_description">Red robot</string>
     <string name="white_content_description">White robot</string>
+    <string name="robot_purchase_activity_button">Purchase Reward</string>
+
+<!--    values for activity_robot_purchase.xml-->
     <string name="energy_content_description">yellow energy icon</string>
     <string name="energy_number_content">purchasing power or cost</string>
     <string name="robot_purchase_power_val">2</string>
@@ -15,5 +19,5 @@
     <string name="ra_cost">1</string>
     <string name="rb_cost">2</string>
     <string name="rc_cost">3</string>
-    <string name="robot_purchase_activity_button">Purchase Reward</string>
+
 </resources>
