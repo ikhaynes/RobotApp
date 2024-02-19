@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/white_large_robot"
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="@string/robot_purchase_power_val"
             android:textSize="20sp"
-            app:drawableRightCompat="@drawable/energy_counter"/>
+            app:drawableRightCompat="@drawable/energy_counter" />
 
     </LinearLayout>
 
