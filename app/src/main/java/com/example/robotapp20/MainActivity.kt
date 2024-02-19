@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         yellowRobot.setOnClickListener {
             robotViewModel.advanceTurn()
-            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(this,
+                "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
             setImages()
         }
 
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         purchaseReward.setOnClickListener {
             val intent = Intent(this, RobotPurchaseActivity::class.java)
             startActivity(intent)
-//            robotViewModel.advanceTurn()
         }
 
     }// end of onCreate
