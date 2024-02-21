@@ -1,6 +1,5 @@
 package com.example.robotapp20
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         purchaseReward.setOnClickListener {
-//            val intent = Intent(this, RobotPurchaseActivity::class.java)
             if (robotViewModel.turnCount == 0){
                 robotViewModel.robots[0].myEnergy = 1
                 val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[0].myEnergy)

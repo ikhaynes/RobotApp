@@ -17,56 +17,59 @@ class RobotPurchaseActivity : AppCompatActivity() {
     private lateinit var rewardButtonA: Button
     private lateinit var rewardButtonB: Button
     private lateinit var rewardButtonC: Button
-    private lateinit var purchasePowerView: TextView
-    private lateinit var costRewardA: TextView
-    private lateinit var costRewardB: TextView
-    private lateinit var costRewardC: TextView
-    private lateinit var retMessage: String
+    private lateinit var robotEnergyView: TextView
     private val robotPurchaseViewModel: RobotPurchaseViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robot_purchase)
 
         rewardButtonA = findViewById(R.id.reward_a)
-        costRewardA = findViewById(R.id.cost_reward_a)
-
         rewardButtonB = findViewById(R.id.reward_b)
-        costRewardB = findViewById(R.id.cost_reward_b)
-
         rewardButtonC = findViewById(R.id.reward_c)
-        costRewardC = findViewById(R.id.cost_reward_c)
 
-        purchasePowerView = findViewById(R.id.robot_purchase_power)
+        robotEnergyView = findViewById(R.id.robot_purchase_power)
 
-
-        robotPurchaseViewModel.purchasePower = intent.getIntExtra(EXTRA_ROBOT_ENERGY, 6)
-        purchasePowerView.text = robotPurchaseViewModel.purchasePower.toString()
+        robotPurchaseViewModel.robotEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY, 6)
+        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
 
         rewardButtonA.setOnClickListener {
-            purchaseItem(costRewardA.text.toString().toInt(), "Reward A")
+            purchaseItem(1, "Reward A")
         }
 
         rewardButtonB.setOnClickListener {
-            purchaseItem(costRewardB.text.toString().toInt(), "Reward B")
+            purchaseItem(2, "Reward B")
         }
 
         rewardButtonC.setOnClickListener {
-            purchaseItem(costRewardC.text.toString().toInt(), "Reward C")
+            purchaseItem(3, "Reward C")
         }
     }   // end of onCreate
 
     companion object{
-        fun newIntent(packageContext: Context, robot_energy : Int): Intent {
+        fun newIntent(packageContext: Context, robotEnergy : Int): Intent {
             return Intent(packageContext, RobotPurchaseActivity::class.java).apply{
-                putExtra(EXTRA_ROBOT_ENERGY, robot_energy)
+                putExtra(EXTRA_ROBOT_ENERGY, robotEnergy)
             }
         }
     }
+//    private fun purchaseItem(cost : Int, reward : String) {
+//        val retMessage = robotPurchaseViewModel.purchaseItem(cost, reward)
+//        Toast.makeText(this, retMessage, Toast.LENGTH_SHORT).show()
+//        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
+//    }
+
+    // might be able to use the previous function (with the one in robotPurchaseViewModel)
+    // instead of the one below. . .
     private fun purchaseItem(cost : Int, reward : String) {
-        retMessage = robotPurchaseViewModel.purchaseItem(cost, reward)
-        Toast.makeText(this, retMessage, Toast.LENGTH_SHORT).show()
-        purchasePowerView.text = robotPurchaseViewModel.purchasePower.toString()
+        if (robotPurchaseViewModel.robotEnergy >= cost){
+            robotPurchaseViewModel.robotEnergy -= cost
+            Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
+
+        } else {
+            Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
+        }
+        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
     }
+
 }

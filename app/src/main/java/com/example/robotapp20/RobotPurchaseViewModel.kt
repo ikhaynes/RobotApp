@@ -1,18 +1,17 @@
-//package com.example.robotappv3
 package com.example.robotapp20
 import androidx.lifecycle.ViewModel
 
 class RobotPurchaseViewModel : ViewModel() {
 
-    private var _purchasePower : Int = 2
+    private var _robotEnergy : Int = 2
 
-    var purchasePower : Int
-        get() = _purchasePower
-        set(value) {_purchasePower = value}
+    var robotEnergy : Int
+        get() = _robotEnergy
+        set(value) {_robotEnergy = value}
 
     fun purchaseItem(cost : Int, reward : String): String {
-        return if (_purchasePower >= cost){
-            _purchasePower -= cost
+        return if (_robotEnergy >= cost){
+            _robotEnergy -= cost
             "$reward Purchased"
         } else {
             "Insufficient Resources"
