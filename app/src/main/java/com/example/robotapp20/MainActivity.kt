@@ -39,23 +39,17 @@ class MainActivity : AppCompatActivity() {
 
 
         yellowRobot.setOnClickListener {
-            robotViewModel.advanceTurn()
             Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
-            setImages()
-            setTurnText(robotViewModel.turnCount)
+            advanceTurn()
         }
 
         redRobot.setOnClickListener {
-            robotViewModel.advanceTurn()
-            setImages()
-            setTurnText(robotViewModel.turnCount)
+            advanceTurn()
         }
 
         whiteRobot.setOnClickListener {
-            robotViewModel.advanceTurn()
             Toast.makeText(this, "My Energy : ${robotViewModel.robots[robotViewModel.turnCount-1].myEnergy}.", Toast.LENGTH_SHORT).show()
-            setImages()
-            setTurnText(robotViewModel.turnCount)
+            advanceTurn()
         }
 
         purchaseReward.setOnClickListener {
@@ -70,6 +64,35 @@ class MainActivity : AppCompatActivity() {
         }
 
     }// end of onCreate
+
+
+
+    private fun advanceTurn() {
+        robotViewModel.turnCount += 1
+        if (robotViewModel.turnCount > 3) {
+            robotViewModel.turnCount = 1
+        }
+        setRobotTurn()
+        setImages()
+        setTurnText(robotViewModel.turnCount)
+    }
+
+    private fun setRobotTurn() {
+        for (robot in robotViewModel.robots) {
+            robot.myTurn = false
+        }
+
+        //step 4
+        if (robotViewModel.turnCount == 0) {
+            robotViewModel.robots[0].myTurn = true
+            robotViewModel.robots[0].myEnergy += 1
+        } else {
+            robotViewModel.robots[robotViewModel.turnCount - 1].myTurn = true
+            robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy += 1
+        }
+    }
+
+
 
     private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
         if(result.resultCode == Activity.RESULT_CANCELED)
