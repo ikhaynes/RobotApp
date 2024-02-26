@@ -54,13 +54,13 @@ class MainActivity : AppCompatActivity() {
 
         purchaseReward.setOnClickListener {
             if (robotViewModel.turnCount == 0){
-                robotViewModel.robots[0].myEnergy = 1
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[0].myEnergy)
-                purchaseLauncher.launch(intent)
+                Toast.makeText(this, "Click on a robot to start the game", Toast.LENGTH_SHORT).show()
             } else {
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy)
+                val intent = RobotPurchaseActivity.newIntent(this)
+                intent.putExtra("robotData", robotViewModel.robots[robotViewModel.turnCount-1])
                 purchaseLauncher.launch(intent)
             }
+
         }
 
     }// end of onCreate
@@ -79,6 +79,12 @@ class MainActivity : AppCompatActivity() {
             // returns value sent from RobotPurchaseActivity
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
             Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
+
+            for (robot in robotViewModel.robots) {
+                if (robot.myTurn){
+                    robot.myEnergy -= robotPurchaseMade.toInt()
+                }
+            }
         }
     }
 
@@ -125,13 +131,13 @@ class MainActivity : AppCompatActivity() {
 
         when (count) {
             1 -> {
-                robotTurnText.text = "Red Robot's Turn"
+                robotTurnText.setText(R.string.red_robot_turn)
             }
             2 -> {
-                robotTurnText.text = "White Robot's Turn"
+                robotTurnText.setText(R.string.white_robot_turn)
             }
             3 -> {
-                robotTurnText.text = "Yellow Robot's Turn"
+                robotTurnText.setText(R.string.yellow_robot_turn)
             }
         }
     }

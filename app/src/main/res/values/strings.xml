@@ -8,9 +8,8 @@
     <string name="red_content_description">Red robot</string>
     <string name="white_content_description">White robot</string>
     <string name="robot_purchase_activity_button">Purchase Reward</string>
-    <string name="default_robot_turn_text">Click on a robot to start</string>
     <string name="robot_turn_content_description">Robot turn</string>
-    <string name="red_robot_turn">Red Robots Turn</string>
+    <string name="red_robot_turn">Red Robot\'s Turn</string>
     <string name="white_robot_turn">White Robot\'s Turn</string>
     <string name="yellow_robot_turn">Yellow Robot\'s Turn</string>
 

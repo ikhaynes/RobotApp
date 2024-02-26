@@ -5,12 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
-private const val EXTRA_ROBOT_ENERGY = "com.example.robotapp20.current_robot_energy"
+//private const val EXTRA_ROBOT_ENERGY = "com.example.robotapp20.current_robot_energy"
 const val EXTRA_ROBOT_PURCHASE_MADE = "com.example.robotapp20.current_robot_purchase_made"
 class RobotPurchaseActivity : AppCompatActivity() {
 
@@ -19,19 +20,24 @@ class RobotPurchaseActivity : AppCompatActivity() {
     private lateinit var rewardButtonB: Button
     private lateinit var rewardButtonC: Button
     private lateinit var robotEnergyView: TextView
+    private lateinit var robotImage: ImageView
     private val robotPurchaseViewModel: RobotPurchaseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robot_purchase)
 
+        robotImage = findViewById(R.id.large_robot)
         rewardButtonA = findViewById(R.id.reward_a)
         rewardButtonB = findViewById(R.id.reward_b)
         rewardButtonC = findViewById(R.id.reward_c)
 
         robotEnergyView = findViewById(R.id.robot_purchase_power)
 
-        robotPurchaseViewModel.robotEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY, 6)
+        val robot = intent.getSerializableExtra("robotData") as Robot
+
+        robotPurchaseViewModel.robotEnergy = robot.myEnergy
+        robotImage.setImageResource(robot.largeImgRes)
         robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
 
         rewardButtonA.setOnClickListener {
@@ -54,10 +60,8 @@ class RobotPurchaseActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, data)
     }
     companion object{
-        fun newIntent(packageContext: Context, robotEnergy : Int): Intent {
-            return Intent(packageContext, RobotPurchaseActivity::class.java).apply{
-                putExtra(EXTRA_ROBOT_ENERGY, robotEnergy)
-            }
+        fun newIntent(packageContext: Context): Intent {
+            return Intent(packageContext, RobotPurchaseActivity::class.java)
         }
     }
     private fun purchaseItem(cost : Int, reward : String) {
