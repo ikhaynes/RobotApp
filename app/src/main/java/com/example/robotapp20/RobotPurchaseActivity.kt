@@ -1,5 +1,6 @@
 package com.example.robotapp20
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-//import com.example.robotappv3.RobotPurchaseViewModel
 
 private const val EXTRA_ROBOT_ENERGY = "com.example.robotapp20.current_robot_energy"
+const val EXTRA_ROBOT_PURCHASE_MADE = "com.example.robotapp20.current_robot_purchase_made"
 class RobotPurchaseActivity : AppCompatActivity() {
 
     // initialize variables
@@ -46,6 +47,12 @@ class RobotPurchaseActivity : AppCompatActivity() {
         }
     }   // end of onCreate
 
+    private fun setWhichItemPurchased(robotPurchaseMade : Int){
+        val data = Intent().apply{
+            putExtra(EXTRA_ROBOT_PURCHASE_MADE, robotPurchaseMade)
+        }
+        setResult(Activity.RESULT_OK)
+    }
     companion object{
         fun newIntent(packageContext: Context, robotEnergy : Int): Intent {
             return Intent(packageContext, RobotPurchaseActivity::class.java).apply{
@@ -53,23 +60,28 @@ class RobotPurchaseActivity : AppCompatActivity() {
             }
         }
     }
-//    private fun purchaseItem(cost : Int, reward : String) {
-//        val retMessage = robotPurchaseViewModel.purchaseItem(cost, reward)
-//        Toast.makeText(this, retMessage, Toast.LENGTH_SHORT).show()
-//        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
-//    }
+    private fun purchaseItem(cost : Int, reward : String) {
+        val retMessage = robotPurchaseViewModel.purchaseItem(cost, reward)
+        Toast.makeText(this, retMessage, Toast.LENGTH_SHORT).show()
+        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
+
+        // idea for HW
+        setWhichItemPurchased(cost)
+        // only do this if there were sufficient resources. . .
+        finish()
+    }
 
     // might be able to use the previous function (with the one in robotPurchaseViewModel)
     // instead of the one below. . .
-    private fun purchaseItem(cost : Int, reward : String) {
-        if (robotPurchaseViewModel.robotEnergy >= cost){
-            robotPurchaseViewModel.robotEnergy -= cost
-            Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
-
-        } else {
-            Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
-        }
-        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
-    }
+//    private fun purchaseItem(cost : Int, reward : String) {
+//        if (robotPurchaseViewModel.robotEnergy >= cost){
+//            robotPurchaseViewModel.robotEnergy -= cost
+//            Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
+//
+//        } else {
+//            Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
+//        }
+//        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
+//    }
 
 }

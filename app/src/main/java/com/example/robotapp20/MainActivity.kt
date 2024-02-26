@@ -1,10 +1,13 @@
 package com.example.robotapp20
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
@@ -32,35 +35,53 @@ class MainActivity : AppCompatActivity() {
             setImages()
         }
 
+        setTurnText(robotViewModel.turnCount)
+
+
         yellowRobot.setOnClickListener {
             robotViewModel.advanceTurn()
             Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
             setImages()
+            setTurnText(robotViewModel.turnCount)
         }
 
         redRobot.setOnClickListener {
             robotViewModel.advanceTurn()
             setImages()
+            setTurnText(robotViewModel.turnCount)
         }
 
         whiteRobot.setOnClickListener {
             robotViewModel.advanceTurn()
             Toast.makeText(this, "My Energy : ${robotViewModel.robots[robotViewModel.turnCount-1].myEnergy}.", Toast.LENGTH_SHORT).show()
             setImages()
+            setTurnText(robotViewModel.turnCount)
         }
 
         purchaseReward.setOnClickListener {
             if (robotViewModel.turnCount == 0){
                 robotViewModel.robots[0].myEnergy = 1
                 val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[0].myEnergy)
-                startActivity(intent)
+                purchaseLauncher.launch(intent)
             } else {
                 val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy)
-                startActivity(intent)
+                purchaseLauncher.launch(intent)
             }
         }
 
     }// end of onCreate
+
+    private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
+        if(result.resultCode == Activity.RESULT_CANCELED)
+            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
+
+        if(result.resultCode == Activity.RESULT_OK) {
+            // returns value sent from RobotPurchaseActivity
+            val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
+//            val robotPurchaseMade2 = result.data?.getIntExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: 0
+            Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun setImages() {
         for (indy in robotViewModel.robots.indices) {
@@ -68,6 +89,22 @@ class MainActivity : AppCompatActivity() {
                 robotImages[indy].setImageResource(robotViewModel.robots[indy].largeImgRes)
             } else {
                 robotImages[indy].setImageResource(robotViewModel.robots[indy].smallImgRes)
+            }
+        }
+    }
+
+    private fun setTurnText(count : Int){
+        val robotTurnText = findViewById<TextView>(R.id.robot_turn_text)
+
+        when (count) {
+            1 -> {
+                robotTurnText.text = "Red Robot's Turn"
+            }
+            2 -> {
+                robotTurnText.text = "White Robot's Turn"
+            }
+            3 -> {
+                robotTurnText.text = "Yellow Robot's Turn"
             }
         }
     }

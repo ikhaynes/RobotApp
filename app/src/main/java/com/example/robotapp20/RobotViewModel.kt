@@ -2,7 +2,6 @@ package com.example.robotapp20
 
 import androidx.lifecycle.ViewModel
 
-//private const val TAG = "RobotViewModel"
 class RobotViewModel : ViewModel() {
 
     private var _turnCount = 0
