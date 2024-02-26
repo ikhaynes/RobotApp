@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity() {
         if(result.resultCode == Activity.RESULT_OK) {
             // returns value sent from RobotPurchaseActivity
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
-//            val robotPurchaseMade2 = result.data?.getIntExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: 0
             Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
         }
     }

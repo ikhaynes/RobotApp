@@ -49,9 +49,9 @@ class RobotPurchaseActivity : AppCompatActivity() {
 
     private fun setWhichItemPurchased(robotPurchaseMade : Int){
         val data = Intent().apply{
-            putExtra(EXTRA_ROBOT_PURCHASE_MADE, robotPurchaseMade)
+            putExtra(EXTRA_ROBOT_PURCHASE_MADE, robotPurchaseMade.toString())
         }
-        setResult(Activity.RESULT_OK)
+        setResult(Activity.RESULT_OK, data)
     }
     companion object{
         fun newIntent(packageContext: Context, robotEnergy : Int): Intent {
