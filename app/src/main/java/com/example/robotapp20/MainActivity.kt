@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
 
         yellowRobot.setOnClickListener {
-            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
             advanceTurn()
         }
 
@@ -48,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         whiteRobot.setOnClickListener {
-            Toast.makeText(this, "My Energy : ${robotViewModel.robots[robotViewModel.turnCount-1].myEnergy}.", Toast.LENGTH_SHORT).show()
             advanceTurn()
         }
 
@@ -60,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("robotData", robotViewModel.robots[robotViewModel.turnCount-1])
                 purchaseLauncher.launch(intent)
             }
-
         }
 
     }// end of onCreate
@@ -72,14 +69,13 @@ class MainActivity : AppCompatActivity() {
 
 
     private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
-        if(result.resultCode == Activity.RESULT_CANCELED)
-            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
+//        if(result.resultCode == Activity.RESULT_CANCELED)
+//            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
 
         if(result.resultCode == Activity.RESULT_OK) {
             // returns value sent from RobotPurchaseActivity
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
-            Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
-
+//            Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
             for (robot in robotViewModel.robots) {
                 if (robot.myTurn){
                     robot.myEnergy -= robotPurchaseMade.toInt()
