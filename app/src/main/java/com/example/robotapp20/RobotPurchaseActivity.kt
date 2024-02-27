@@ -52,6 +52,11 @@ class RobotPurchaseActivity : AppCompatActivity() {
         robotImage.setImageResource(robot.largeImgRes)
         robotEnergyView.text = robot.myEnergy.toString()
 
+        // show last reward purchased
+        if (robot.rewardsPurchased.size > 0){
+            Toast.makeText(this, "Last Purchase: ${robot.rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+        }
+
         rewardButtonA.setOnClickListener {
             purchaseItem(costA.text.toString().toInt(), rewardButtonA.text.toString(), robot)
         }
@@ -65,9 +70,10 @@ class RobotPurchaseActivity : AppCompatActivity() {
         }
     }   // end of onCreate
 
-    private fun setWhichItemPurchased(robotPurchaseMade : Int){
+    private fun setWhichItemPurchased(robotPurchaseMade : Int, reward : String){
         val data = Intent().apply{
             putExtra(EXTRA_ROBOT_PURCHASE_MADE, robotPurchaseMade.toString())
+            putExtra("reward", reward)
         }
         setResult(Activity.RESULT_OK, data)
     }
@@ -79,17 +85,22 @@ class RobotPurchaseActivity : AppCompatActivity() {
 
 
     private fun purchaseItem(cost : Int, reward : String, robot: Robot) {
-        if ( robot.myEnergy >= cost){
-            robot.myEnergy -= cost
-            Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
-            setWhichItemPurchased(cost)
 
+        if (reward in robot.rewardsPurchased){
+            Toast.makeText(this, "You already have $reward", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
-        }
+            if (robot.myEnergy >= cost) {
+                robot.myEnergy -= cost
+                Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
+                setWhichItemPurchased(cost, reward)
 
-        robotEnergyView.text = robot.myEnergy.toString()
-        finish()
+            } else {
+                Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
+            }
+
+            robotEnergyView.text = robot.myEnergy.toString()
+            finish()
+        }
     }
 
     private fun setRewards() {

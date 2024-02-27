@@ -75,10 +75,13 @@ class MainActivity : AppCompatActivity() {
         if(result.resultCode == Activity.RESULT_OK) {
             // returns value sent from RobotPurchaseActivity
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
-//            Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
+            val rewardPurchased = result.data?.getStringExtra("reward")
+
+            // update robot energy and rewardsPurchased
             for (robot in robotViewModel.robots) {
                 if (robot.myTurn){
                     robot.myEnergy -= robotPurchaseMade.toInt()
+                    robot.rewardsPurchased.add(0, rewardPurchased.toString())
                 }
             }
         }
@@ -107,6 +110,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             robotViewModel.robots[robotViewModel.turnCount - 1].myTurn = true
             robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy += 1
+
+            // show last reward purchased
+//            if (robotViewModel.robots[robotViewModel.turnCount - 1].rewardsPurchased.size > 0){
+//                Toast.makeText(this, "Last Purchase: ${robotViewModel.robots[robotViewModel.turnCount-1].rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 
