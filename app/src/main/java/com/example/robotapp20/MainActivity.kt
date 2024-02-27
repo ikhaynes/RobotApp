@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var yellowRobot: ImageView
     private lateinit var redRobot: ImageView
     private lateinit var whiteRobot: ImageView
@@ -63,11 +62,6 @@ class MainActivity : AppCompatActivity() {
     }// end of onCreate
 
 
-
-
-
-
-
     private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
 //        if(result.resultCode == Activity.RESULT_CANCELED)
 //            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
@@ -96,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         setRobotTurn()
         setImages()
         setTurnText(robotViewModel.turnCount)
+        showPurchasedRewards(robotViewModel.turnCount-1)
     }
 
     private fun setRobotTurn() {
@@ -117,8 +112,6 @@ class MainActivity : AppCompatActivity() {
 //            }
         }
     }
-
-
 
     private fun setImages() {
         for (indy in robotViewModel.robots.indices) {
@@ -146,4 +139,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPurchasedRewards(indy : Int ) {
+        var toastMessage = "Owned Rewards:"
+        if ( (indy > 0) and (robotViewModel.robots[indy].rewardsPurchased.size > 0) ) {
+            for (reward in robotViewModel.robots[indy].rewardsPurchased) {
+                toastMessage += " $reward"
+            }
+
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 }
