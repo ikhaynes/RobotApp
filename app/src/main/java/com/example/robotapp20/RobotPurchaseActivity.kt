@@ -8,10 +8,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 const val EXTRA_ROBOT_PURCHASE_MADE = "com.example.robotapp20.current_robot_purchase_made"
 class RobotPurchaseActivity : AppCompatActivity() {
@@ -43,11 +41,13 @@ class RobotPurchaseActivity : AppCompatActivity() {
         costB = findViewById(R.id.cost_reward_b)
         costC = findViewById(R.id.cost_reward_c)
 
-        setRewards()
+
 
         robotEnergyView = findViewById(R.id.robot_purchase_power)
 
         val robot = intent.getSerializableExtra("robotData") as Robot
+
+        setRewards()
 
         robotImage.setImageResource(robot.largeImgRes)
         robotEnergyView.text = robot.myEnergy.toString()
@@ -113,6 +113,7 @@ class RobotPurchaseActivity : AppCompatActivity() {
 
         val rewards = mutableListOf(rewardList[ randomInts[0] ], rewardList[ randomInts[1] ], rewardList[ randomInts[2] ])
         val costs = mutableListOf(rewardCostList[ randomInts[0] ], rewardCostList[ randomInts[1] ], rewardCostList[ randomInts[2] ])
+
         rewards.sort()
         costs.sort()
 
