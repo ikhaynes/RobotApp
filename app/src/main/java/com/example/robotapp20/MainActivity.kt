@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         purchaseReward.setOnClickListener {
             if (robotViewModel.turnCount == 0){
-                robotViewModel.robots[0].myEnergy = 1
+                robotViewModel.robots[0].myEnergy = 0
                 val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.robots[0].myEnergy)
                 purchaseLauncher.launch(intent)
             } else {
@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
 //            val robotPurchaseMade2 = result.data?.getIntExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: 0
             Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
+            for ( robot in robotViewModel.robots ) {
+                if ( robot.myTurn ) {
+                    robot.myEnergy -= robotPurchaseMade.toInt()
+                }
+            }
         }
     }
 
