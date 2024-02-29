@@ -53,9 +53,9 @@ class RobotPurchaseActivity : AppCompatActivity() {
         robotEnergyView.text = robot.myEnergy.toString()
 
         // show last reward purchased
-        if (robot.rewardsPurchased.size > 0){
-            Toast.makeText(this, "Last Purchase: ${robot.rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
-        }
+//        if (robot.rewardsPurchased.size > 0){
+//            Toast.makeText(this, "Last Purchase: ${robot.rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//        }
 
         rewardButtonA.setOnClickListener {
             purchaseItem(costA.text.toString().toInt(), rewardButtonA.text.toString(), robot)
@@ -93,13 +93,14 @@ class RobotPurchaseActivity : AppCompatActivity() {
                 robot.myEnergy -= cost
                 Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
                 setWhichItemPurchased(cost, reward)
+                finish()
 
             } else {
                 Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
             }
 
             robotEnergyView.text = robot.myEnergy.toString()
-            finish()
+
         }
     }
 

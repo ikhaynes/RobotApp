@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         setRobotTurn()
         setImages()
         setTurnText(robotViewModel.turnCount)
-//        showPurchasedRewards(robotViewModel.turnCount-1)
+        showPurchasedRewards(robotViewModel.turnCount-1)
     }
 
     private fun setRobotTurn() {
@@ -106,11 +106,12 @@ class MainActivity : AppCompatActivity() {
             robotViewModel.robots[robotViewModel.turnCount - 1].myTurn = true
             robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy += 1
 
+
             // show last reward purchased (Task 1)
             // comment out below lines and call showPurchasedRewards() in advanceTurn for final
-            if (robotViewModel.robots[robotViewModel.turnCount - 1].rewardsPurchased.size > 0){
-                Toast.makeText(this, "Last Purchase: ${robotViewModel.robots[robotViewModel.turnCount-1].rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
-            }
+//            if (robotViewModel.robots[robotViewModel.turnCount - 1].rewardsPurchased.size > 0){
+//                Toast.makeText(this, "Last Purchase: ${robotViewModel.robots[robotViewModel.turnCount-1].rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 
@@ -141,8 +142,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showPurchasedRewards(indy : Int ) {
-        var toastMessage = "Owned Rewards:"
-        if ( (indy > 0) and (robotViewModel.robots[indy].rewardsPurchased.size > 0) ) {
+        var toastMessage = "Purchased Rewards:"
+        if ( (indy >= 0) and (robotViewModel.robots[indy].rewardsPurchased.size > 0) ) {
             for (reward in robotViewModel.robots[indy].rewardsPurchased) {
                 toastMessage += " $reward"
             }
