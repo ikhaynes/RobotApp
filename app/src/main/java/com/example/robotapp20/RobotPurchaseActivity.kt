@@ -8,10 +8,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.random.Random
 
-//private const val EXTRA_ROBOT_ENERGY = "com.example.robotapp20.current_robot_energy"
 const val EXTRA_ROBOT_PURCHASE_MADE = "com.example.robotapp20.current_robot_purchase_made"
 class RobotPurchaseActivity : AppCompatActivity() {
 
@@ -19,9 +18,15 @@ class RobotPurchaseActivity : AppCompatActivity() {
     private lateinit var rewardButtonA: Button
     private lateinit var rewardButtonB: Button
     private lateinit var rewardButtonC: Button
+    private lateinit var costA: TextView
+    private lateinit var costB: TextView
+    private lateinit var costC: TextView
     private lateinit var robotEnergyView: TextView
     private lateinit var robotImage: ImageView
-    private val robotPurchaseViewModel: RobotPurchaseViewModel by viewModels()
+
+    private val rewardList = listOf("Reward A", "Reward B", "Reward C",
+        "Reward D", "Reward E", "Reward F", "Reward G")
+    private val rewardCostList = listOf(1, 2, 3, 3, 4, 4, 7)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,30 +37,43 @@ class RobotPurchaseActivity : AppCompatActivity() {
         rewardButtonB = findViewById(R.id.reward_b)
         rewardButtonC = findViewById(R.id.reward_c)
 
+        costA = findViewById(R.id.cost_reward_a)
+        costB = findViewById(R.id.cost_reward_b)
+        costC = findViewById(R.id.cost_reward_c)
+
+
+
         robotEnergyView = findViewById(R.id.robot_purchase_power)
 
         val robot = intent.getSerializableExtra("robotData") as Robot
 
-        robotPurchaseViewModel.robotEnergy = robot.myEnergy
+        setRewards()
+
         robotImage.setImageResource(robot.largeImgRes)
-        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
+        robotEnergyView.text = robot.myEnergy.toString()
+
+        // show last reward purchased
+//        if (robot.rewardsPurchased.size > 0){
+//            Toast.makeText(this, "Last Purchase: ${robot.rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//        }
 
         rewardButtonA.setOnClickListener {
-            purchaseItem(1, "Reward A")
+            purchaseItem(costA.text.toString().toInt(), rewardButtonA.text.toString(), robot)
         }
 
         rewardButtonB.setOnClickListener {
-            purchaseItem(2, "Reward B")
+            purchaseItem(costB.text.toString().toInt(), rewardButtonB.text.toString(), robot)
         }
 
         rewardButtonC.setOnClickListener {
-            purchaseItem(3, "Reward C")
+            purchaseItem(costC.text.toString().toInt(), rewardButtonC.text.toString(), robot)
         }
     }   // end of onCreate
 
-    private fun setWhichItemPurchased(robotPurchaseMade : Int){
+    private fun setWhichItemPurchased(robotPurchaseMade : Int, reward : String){
         val data = Intent().apply{
             putExtra(EXTRA_ROBOT_PURCHASE_MADE, robotPurchaseMade.toString())
+            putExtra("reward", reward)
         }
         setResult(Activity.RESULT_OK, data)
     }
@@ -64,28 +82,50 @@ class RobotPurchaseActivity : AppCompatActivity() {
             return Intent(packageContext, RobotPurchaseActivity::class.java)
         }
     }
-    private fun purchaseItem(cost : Int, reward : String) {
-        val retMessage = robotPurchaseViewModel.purchaseItem(cost, reward)
-        Toast.makeText(this, retMessage, Toast.LENGTH_SHORT).show()
-        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
 
-        // idea for HW
-        setWhichItemPurchased(cost)
-        // only do this if there were sufficient resources. . .
-        finish()
+
+    private fun purchaseItem(cost : Int, reward : String, robot: Robot) {
+
+        if (reward in robot.rewardsPurchased){
+            Toast.makeText(this, "You already have $reward", Toast.LENGTH_SHORT).show()
+        } else {
+            if (robot.myEnergy >= cost) {
+                robot.myEnergy -= cost
+                Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
+                setWhichItemPurchased(cost, reward)
+                finish()
+
+            } else {
+                Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
+            }
+
+            robotEnergyView.text = robot.myEnergy.toString()
+
+        }
     }
 
-    // might be able to use the previous function (with the one in robotPurchaseViewModel)
-    // instead of the one below. . .
-//    private fun purchaseItem(cost : Int, reward : String) {
-//        if (robotPurchaseViewModel.robotEnergy >= cost){
-//            robotPurchaseViewModel.robotEnergy -= cost
-//            Toast.makeText(this, "$reward Purchased", Toast.LENGTH_SHORT).show()
-//
-//        } else {
-//            Toast.makeText(this, "Insufficient Resources", Toast.LENGTH_SHORT).show()
-//        }
-//        robotEnergyView.text = robotPurchaseViewModel.robotEnergy.toString()
-//    }
+    private fun setRewards() {
+        val randomInts = generateSequence {
+            Random.nextInt(0, 7)
+        }
+            .distinct()
+            .take(3)
+            .toList()
+
+        val rewards = mutableListOf(rewardList[ randomInts[0] ], rewardList[ randomInts[1] ], rewardList[ randomInts[2] ])
+        val costs = mutableListOf(rewardCostList[ randomInts[0] ], rewardCostList[ randomInts[1] ], rewardCostList[ randomInts[2] ])
+
+        rewards.sort()
+        costs.sort()
+
+        rewardButtonA.text = rewards[0]
+        costA.text = costs[0].toString()
+
+        rewardButtonB.text = rewards[1]
+        costB.text = costs[1].toString()
+
+        rewardButtonC.text = rewards[2]
+        costC.text = costs[2].toString()
+    }
 
 }

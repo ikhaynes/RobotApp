@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var yellowRobot: ImageView
     private lateinit var redRobot: ImageView
     private lateinit var whiteRobot: ImageView
@@ -40,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         yellowRobot.setOnClickListener {
 //            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
+
             advanceTurn()
         }
 
@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         whiteRobot.setOnClickListener {
+
 //            Toast.makeText(this, "My Energy : ${robotViewModel.robots[robotViewModel.turnCount-1].myEnergy}.", Toast.LENGTH_SHORT).show()
+
             advanceTurn()
         }
 
@@ -60,29 +62,25 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("robotData", robotViewModel.robots[robotViewModel.turnCount-1])
                 purchaseLauncher.launch(intent)
             }
-
         }
 
     }// end of onCreate
 
 
-
-
-
-
-
     private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
-        if(result.resultCode == Activity.RESULT_CANCELED)
-            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
+//        if(result.resultCode == Activity.RESULT_CANCELED)
+//            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
 
         if(result.resultCode == Activity.RESULT_OK) {
             // returns value sent from RobotPurchaseActivity
             val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
-            Toast.makeText(this,"Data Received $robotPurchaseMade", Toast.LENGTH_SHORT).show()
+            val rewardPurchased = result.data?.getStringExtra("reward")
 
+            // update robot energy and rewardsPurchased
             for (robot in robotViewModel.robots) {
                 if (robot.myTurn){
                     robot.myEnergy -= robotPurchaseMade.toInt()
+                    robot.rewardsPurchased.add(0, rewardPurchased.toString())
                 }
             }
         }
@@ -97,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         setRobotTurn()
         setImages()
         setTurnText(robotViewModel.turnCount)
+        showPurchasedRewards(robotViewModel.turnCount-1)
     }
 
     private fun setRobotTurn() {
@@ -111,10 +110,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             robotViewModel.robots[robotViewModel.turnCount - 1].myTurn = true
             robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy += 1
+
+
+            // show last reward purchased (Task 1)
+            // comment out below lines and call showPurchasedRewards() in advanceTurn for final
+//            if (robotViewModel.robots[robotViewModel.turnCount - 1].rewardsPurchased.size > 0){
+//                Toast.makeText(this, "Last Purchase: ${robotViewModel.robots[robotViewModel.turnCount-1].rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
-
-
 
     private fun setImages() {
         for (indy in robotViewModel.robots.indices) {
@@ -142,4 +146,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPurchasedRewards(indy : Int ) {
+        var toastMessage = "Purchased Rewards:"
+        if ( (indy >= 0) and (robotViewModel.robots[indy].rewardsPurchased.size > 0) ) {
+            for (reward in robotViewModel.robots[indy].rewardsPurchased) {
+                toastMessage += " $reward"
+            }
+
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 }
