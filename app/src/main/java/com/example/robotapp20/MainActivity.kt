@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
 
         yellowRobot.setOnClickListener {
+//            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
+
             advanceTurn()
         }
 
@@ -46,6 +48,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         whiteRobot.setOnClickListener {
+
+//            Toast.makeText(this, "My Energy : ${robotViewModel.robots[robotViewModel.turnCount-1].myEnergy}.", Toast.LENGTH_SHORT).show()
+
             advanceTurn()
         }
 
