@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="330dp"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity">
@@ -40,44 +40,22 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/robot_white_large" />
     </LinearLayout>
-
-<!--    empty linear layout to add a space for buttons-->
-    <LinearLayout
-        android:id="@+id/empty_layout_1"
-        android:orientation="horizontal"
+    <TextView
+        android:id="@+id/robot_turn_text"
+        android:contentDescription="@string/robot_turn_content_description"
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="32dp"
+        android:gravity="center"
+        android:textSize="24sp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <Button
+        android:id="@+id/purchase_reward"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
+        android:text="@string/robot_purchase_activity_button" />
 
-
-        <ImageButton
-            android:id="@+id/rot_cw"
-            android:contentDescription="@string/CW_content_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rot_cw_background"
-            app:srcCompat="@drawable/rot_clockwise" />
-
-<!--        empty layout for space   -->
-        <LinearLayout
-            android:id="@+id/empty_layout_2"
-            android:orientation="horizontal"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
-
-        <ImageButton
-            android:id="@+id/rot_ccw"
-            android:contentDescription="@string/CCW_content_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rot_ccw_background"
-            app:srcCompat="@drawable/rot_counter" />
-
-    </LinearLayout>
 
 </LinearLayout>

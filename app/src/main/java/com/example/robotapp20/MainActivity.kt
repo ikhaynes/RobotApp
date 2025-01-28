@@ -1,156 +1,154 @@
 package com.example.robotapp20
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.ImageButton
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-//import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 
-private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
+    private lateinit var yellowRobot: ImageView
+    private lateinit var redRobot: ImageView
+    private lateinit var whiteRobot: ImageView
+    private lateinit var purchaseReward: Button
 
-    private lateinit var yellowRobot : ImageView
-    private lateinit var redRobot : ImageView
-    private lateinit var whiteRobot : ImageView
-    private lateinit var rotCWButton : ImageButton
-    private lateinit var rotCCWButton : ImageButton
+    private lateinit var robotImages: MutableList<ImageView>
+    private val robotViewModel: RobotViewModel by viewModels()
 
-//    private var turnCount = 0
-    private lateinit var robotImages : MutableList<ImageView>
-
-    private val robots = listOf(
-    Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
-    Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
-    Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
-    )
-
-    private val robotViewModel : RobotViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        Log.d(TAG, "OnCreate(savedInstanceState)")
-//        Log.d(TAG, "got a RobotView Model: $robotViewModel")
-//        val robots = listOf(
-//            Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
-//            Robot(false, R.drawable.robot_white_large, R.drawable.robot_white_small),
-//            Robot(false, R.drawable.robot_yellow_large, R.drawable.robot_yellow_small)
-//        )
-
         yellowRobot = findViewById(R.id.yellow_robot_large)
         redRobot = findViewById(R.id.red_robot_large)
         whiteRobot = findViewById(R.id.white_robot_large)
-
         robotImages = mutableListOf(redRobot, whiteRobot, yellowRobot)
+        purchaseReward = findViewById(R.id.purchase_reward)
 
-        rotCWButton = findViewById(R.id.rot_cw)
-        rotCCWButton = findViewById(R.id.rot_ccw)
-
-        rotCWButton.setOnClickListener{
-            reverseTurn()
+        //sets images if app is re-opened or rotated
+        if (robotViewModel.turnCount != 0){
+            setImages()
         }
 
-        rotCCWButton.setOnClickListener {
-            advanceTurn()
-        }
+        setTurnText(robotViewModel.turnCount)
+
 
         yellowRobot.setOnClickListener {
             advanceTurn()
-            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
         }
 
-//        redRobot.setOnClickListener {
-//            advanceTurn()
-//        }
-//
-//        whiteRobot.setOnClickListener {
-//            advanceTurn()
-//        }
+        redRobot.setOnClickListener {
+            advanceTurn()
+        }
+
+        whiteRobot.setOnClickListener {
+            advanceTurn()
+        }
+
+        purchaseReward.setOnClickListener {
+            if (robotViewModel.turnCount == 0){
+                Toast.makeText(this, "Click on a robot to start the game", Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = RobotPurchaseActivity.newIntent(this)
+                intent.putExtra("robotData", robotViewModel.robots[robotViewModel.turnCount-1])
+                purchaseLauncher.launch(intent)
+            }
+        }
 
     }// end of onCreate
 
 
-    private fun advanceTurn(){
-        robotViewModel.turnCount += 1
-        if(robotViewModel.turnCount > 3){
-            robotViewModel.turnCount = 1
-        }
-        setRobotTurn()
-        setImages()
-    }
+    private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
+//        if(result.resultCode == Activity.RESULT_CANCELED)
+//            Toast.makeText(this,"Data Canceled ", Toast.LENGTH_SHORT).show()
 
-    private fun reverseTurn(){
-        robotViewModel.turnCount -= 1
-        if (robotViewModel.turnCount == -1){
-            robotViewModel.turnCount = 1
-        }
-        if(robotViewModel.turnCount < 1 ){
-            robotViewModel.turnCount = 3
-        }
-        setRobotTurn()
-        setImages()
-    }
+        if(result.resultCode == Activity.RESULT_OK) {
+            // returns value sent from RobotPurchaseActivity
+            val robotPurchaseMade = result.data?.getStringExtra(EXTRA_ROBOT_PURCHASE_MADE) ?: "0"
+            val rewardPurchased = result.data?.getStringExtra("reward")
 
-//    private fun setImages(){
-//
-//        if(robotViewModel.turnCount == 1){
-//            redRobot.setImageResource(R.drawable.robot_red_large)
-//            whiteRobot.setImageResource(R.drawable.robot_white_small)
-//            yellowRobot.setImageResource(R.drawable.robot_yellow_small)
-//        } else if(robotViewModel.turnCount == 2){
-//            redRobot.setImageResource(R.drawable.robot_red_small)
-//            whiteRobot.setImageResource(R.drawable.robot_white_large)
-//            yellowRobot.setImageResource(R.drawable.robot_yellow_small)
-//        } else {
-//            redRobot.setImageResource(R.drawable.robot_red_small)
-//            whiteRobot.setImageResource(R.drawable.robot_white_small)
-//            yellowRobot.setImageResource(R.drawable.robot_yellow_large)
-//        }
-//    }
-    private fun setImages(){
-        for (indy in robots.indices){
-            if(robots[indy].myTurn){
-                robotImages[indy].setImageResource(robots[indy].largeImgRes)
-            } else {
-                robotImages[indy].setImageResource(robots[indy].smallImgRes)
+            // update robot energy and rewardsPurchased
+            for (robot in robotViewModel.robots) {
+                if (robot.myTurn){
+                    robot.myEnergy -= robotPurchaseMade.toInt()
+                    robot.rewardsPurchased.add(0, rewardPurchased.toString())
+                }
             }
         }
     }
 
 
-    private fun setRobotTurn(){
-        for(robot in robots){
-            robot.myTurn = false
+    private fun advanceTurn() {
+        robotViewModel.turnCount += 1
+        if (robotViewModel.turnCount > 3) {
+            robotViewModel.turnCount = 1
         }
-        robots[robotViewModel.turnCount - 1].myTurn = true
+        setRobotTurn()
+        setImages()
+        setTurnText(robotViewModel.turnCount)
+        showPurchasedRewards(robotViewModel.turnCount-1)
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        Log.d(TAG, "onStart() called")
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        Log.d(TAG, "onResume() called")
-//    }
-//
-//    override fun onDestroy(){
-//        super.onDestroy()
-//        Log.d(TAG, "onDestroy() called")
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        Log.d(TAG, "onPause() called")
-//    }
-//
-//    override fun onStop(){
-//        super.onStop()
-//        Log.d(TAG, "onStop() called")
-//    }
+    private fun setRobotTurn() {
+        for (robot in robotViewModel.robots) {
+            robot.myTurn = false
+        }
+
+        //step 4
+        if (robotViewModel.turnCount == 0) {
+            robotViewModel.robots[0].myTurn = true
+            robotViewModel.robots[0].myEnergy += 1
+        } else {
+            robotViewModel.robots[robotViewModel.turnCount - 1].myTurn = true
+            robotViewModel.robots[robotViewModel.turnCount - 1].myEnergy += 1
+
+
+            // show last reward purchased (Task 1)
+            // comment out below lines and call showPurchasedRewards() in advanceTurn for final
+//            if (robotViewModel.robots[robotViewModel.turnCount - 1].rewardsPurchased.size > 0){
+//                Toast.makeText(this, "Last Purchase: ${robotViewModel.robots[robotViewModel.turnCount-1].rewardsPurchased[0]}", Toast.LENGTH_SHORT).show()
+//            }
+        }
+    }
+
+    private fun setImages() {
+        for (indy in robotViewModel.robots.indices) {
+            if (robotViewModel.robots[indy].myTurn) {
+                robotImages[indy].setImageResource(robotViewModel.robots[indy].largeImgRes)
+            } else {
+                robotImages[indy].setImageResource(robotViewModel.robots[indy].smallImgRes)
+            }
+        }
+    }
+
+    private fun setTurnText(count : Int){
+        val robotTurnText = findViewById<TextView>(R.id.robot_turn_text)
+
+        when (count) {
+            1 -> {
+                robotTurnText.setText(R.string.red_robot_turn)
+            }
+            2 -> {
+                robotTurnText.setText(R.string.white_robot_turn)
+            }
+            3 -> {
+                robotTurnText.setText(R.string.yellow_robot_turn)
+            }
+        }
+    }
+
+    private fun showPurchasedRewards(indy : Int ) {
+        var toastMessage = "Purchased Rewards:"
+        if ( (indy >= 0) and (robotViewModel.robots[indy].rewardsPurchased.size > 0) ) {
+            for (reward in robotViewModel.robots[indy].rewardsPurchased) {
+                toastMessage += " $reward"
+            }
+
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 }
