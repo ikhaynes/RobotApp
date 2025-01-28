@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         yellowRobot.setOnClickListener {
             robotViewModel.advanceTurn()
-            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "TurnCount : ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
             setImages()
         }
 
